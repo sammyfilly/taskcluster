@@ -4348,11 +4348,11 @@ json-stable-stringify-without-jsonify@^1.0.1:
   integrity sha1-nbe1lJatPzz+8wp1FC0tkwrXJlE=
 
 json-stable-stringify@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/json-stable-stringify/-/json-stable-stringify-1.0.1.tgz#9a759d39c5f2ff503fd5300646ed445f88c4f9af"
-  integrity sha1-mnWdOcXy/1A/1TAGRu1EX4jE+a8=
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/json-stable-stringify/-/json-stable-stringify-1.0.2.tgz#e06f23128e0bbe342dc996ed5a19e28b57b580e0"
+  integrity sha512-eunSSaEnxV12z+Z73y/j5N37/In40GK4GmsSy+tEHJMxknvqnA7/djeYtAgW0GsWHUfg+847WJjKaEylk2y09g==
   dependencies:
-    jsonify "~0.0.0"
+    jsonify "^0.0.1"
 
 json-stringify-safe@^5.0.0, json-stringify-safe@^5.0.1, json-stringify-safe@~5.0.1:
   version "5.0.1"
@@ -4366,10 +4366,10 @@ jsonfile@^4.0.0:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
-jsonify@~0.0.0:
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
-  integrity sha1-LHS27kHZPKUbe1qu6PUDYx0lKnM=
+jsonify@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.1.tgz#2aa3111dae3d34a0f151c63f3a45d995d9420978"
+  integrity sha512-2/Ki0GcmuqSrgFyelQq9M05y7PS0mEwuIzrf3f1fPqkVDVRvZrPZtVSMHxdgo8Aq0sxAOb/cr2aqqA3LeWHVPg==
 
 jsonwebtoken@^8.1.1, jsonwebtoken@^8.5.1:
   version "8.5.1"
@@ -6674,7 +6674,7 @@ tar-stream@^2.0.0:
     readable-stream "^3.1.1"
 
 "taskcluster-client@link:clients/client":
-  version "44.23.2"
+  version "44.23.3"
   dependencies:
     debug "^4.1.1"
     got "^11.8.1"
@@ -6684,37 +6684,37 @@ tar-stream@^2.0.0:
     taskcluster-lib-urls "^13.0.0"
 
 "taskcluster-db@link:db":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-api@link:libraries/api":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-app@link:libraries/app":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-azqueue@link:libraries/azqueue":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-config@link:libraries/config":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-iterate@link:libraries/iterate":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-loader@link:libraries/loader":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-monitor@link:libraries/monitor":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-postgres@link:libraries/postgres":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-pulse@link:libraries/pulse":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-references@link:libraries/references":
-  version "44.23.2"
+  version "44.23.3"
 
 taskcluster-lib-scopes@^11.0.0:
   version "11.0.0"
@@ -6724,7 +6724,7 @@ taskcluster-lib-scopes@^11.0.0:
     fast-json-stable-stringify "^2.1.0"
 
 "taskcluster-lib-testing@link:libraries/testing":
-  version "44.23.2"
+  version "44.23.3"
 
 taskcluster-lib-urls@^13.0.0:
   version "13.0.1"
@@ -6732,7 +6732,7 @@ taskcluster-lib-urls@^13.0.0:
   integrity sha512-WrhKMbiWmpPrB0vbzLZq4W35mhdPVLklZY+qrBoI7KQzFAjO/qsgS8ssHL6eYmvBf4fE7C+C9ZFxQpQOUynQvg==
 
 "taskcluster-lib-validate@link:libraries/validate":
-  version "44.23.2"
+  version "44.23.3"
 
 test-exclude@^6.0.0:
   version "6.0.0"
