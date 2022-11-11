@@ -3599,9 +3599,9 @@ graphql-playground-middleware-express@^1.7.8:
     graphql-playground-html "^1.6.30"
 
 graphql-scalars@^1.20.0:
-  version "1.20.0"
-  resolved "https://registry.yarnpkg.com/graphql-scalars/-/graphql-scalars-1.20.0.tgz#c5481de8277d5f4ca01252a8adcba52778aba6f5"
-  integrity sha512-1KV9Uyr64bbBlmtNzn/vp5mp1+Cob8jG7AKF7RLsKq50ocV6yNhW3+pVvh5jJs1np5Wh+Wg9bDapwQ7q2saS6A==
+  version "1.20.1"
+  resolved "https://registry.yarnpkg.com/graphql-scalars/-/graphql-scalars-1.20.1.tgz#295817deff224ac0562545858e370447b97e7457"
+  integrity sha512-HCSosMh8l/DVYL3/wCesnZOb+gbiaO/XlZQEIKOkWDJUGBrc15xWAs5TCQVmrycT0tbEInii+J8eoOyMwxx8zg==
   dependencies:
     tslib "~2.4.0"
 
@@ -6674,7 +6674,7 @@ tar-stream@^2.0.0:
     readable-stream "^3.1.1"
 
 "taskcluster-client@link:clients/client":
-  version "44.23.2"
+  version "44.23.3"
   dependencies:
     debug "^4.1.1"
     got "^11.8.1"
@@ -6684,37 +6684,37 @@ tar-stream@^2.0.0:
     taskcluster-lib-urls "^13.0.0"
 
 "taskcluster-db@link:db":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-api@link:libraries/api":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-app@link:libraries/app":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-azqueue@link:libraries/azqueue":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-config@link:libraries/config":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-iterate@link:libraries/iterate":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-loader@link:libraries/loader":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-monitor@link:libraries/monitor":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-postgres@link:libraries/postgres":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-pulse@link:libraries/pulse":
-  version "44.23.2"
+  version "44.23.3"
 
 "taskcluster-lib-references@link:libraries/references":
-  version "44.23.2"
+  version "44.23.3"
 
 taskcluster-lib-scopes@^11.0.0:
   version "11.0.0"
@@ -6724,7 +6724,7 @@ taskcluster-lib-scopes@^11.0.0:
     fast-json-stable-stringify "^2.1.0"
 
 "taskcluster-lib-testing@link:libraries/testing":
-  version "44.23.2"
+  version "44.23.3"
 
 taskcluster-lib-urls@^13.0.0:
   version "13.0.1"
@@ -6732,7 +6732,7 @@ taskcluster-lib-urls@^13.0.0:
   integrity sha512-WrhKMbiWmpPrB0vbzLZq4W35mhdPVLklZY+qrBoI7KQzFAjO/qsgS8ssHL6eYmvBf4fE7C+C9ZFxQpQOUynQvg==
 
 "taskcluster-lib-validate@link:libraries/validate":
-  version "44.23.2"
+  version "44.23.3"
 
 test-exclude@^6.0.0:
   version "6.0.0"
@@ -6866,7 +6866,7 @@ tslib@^1.10.0, tslib@^1.9.3:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.0, tslib@^2.2.0, tslib@~2.4.0:
+tslib@^2.0.0, tslib@^2.2.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
   integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
@@ -6876,7 +6876,7 @@ tslib@^2.0.3:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
 
-tslib@^2.1.0, tslib@^2.4.0:
+tslib@^2.1.0, tslib@^2.4.0, tslib@~2.4.0:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.1.tgz#0d0bfbaac2880b91e22df0768e55be9753a5b17e"
   integrity sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==
