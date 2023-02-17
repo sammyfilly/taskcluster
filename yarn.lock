@@ -6264,9 +6264,9 @@ safe-regex-test@^1.0.0:
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
 sanitize-html@^2.8.1:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/sanitize-html/-/sanitize-html-2.9.0.tgz#f4829557b0175df9059d90fe972d5e6facb8565c"
-  integrity sha512-KY1hpSbqFNcpoLf+nP7iStbP5JfQZ2Nd19ZEE7qFsQqRdp+sO5yX/e5+HoG9puFAcSTEpzQuihfKUltDcLlQjg==
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/sanitize-html/-/sanitize-html-2.10.0.tgz#74d28848dfcf72c39693139131895c78900ab452"
+  integrity sha512-JqdovUd81dG4k87vZt6uA6YhDfWkUGruUu/aPmXLxXi45gZExnt9Bnw/qeQU8oGf82vPyaE0vO4aH0PbobB9JQ==
   dependencies:
     deepmerge "^4.2.2"
     escape-string-regexp "^4.0.0"
@@ -6786,7 +6786,7 @@ tar-stream@^2.0.0:
     readable-stream "^3.1.1"
 
 "taskcluster-client@link:clients/client":
-  version "47.0.3"
+  version "47.1.0"
   dependencies:
     debug "^4.1.1"
     got "^11.8.1"
@@ -6796,37 +6796,37 @@ tar-stream@^2.0.0:
     taskcluster-lib-urls "^13.0.0"
 
 "taskcluster-db@link:db":
-  version "47.0.3"
+  version "47.1.0"
 
 "taskcluster-lib-api@link:libraries/api":
-  version "47.0.3"
+  version "47.1.0"
 
 "taskcluster-lib-app@link:libraries/app":
-  version "47.0.3"
+  version "47.1.0"
 
 "taskcluster-lib-azqueue@link:libraries/azqueue":
-  version "47.0.3"
+  version "47.1.0"
 
 "taskcluster-lib-config@link:libraries/config":
-  version "47.0.3"
+  version "47.1.0"
 
 "taskcluster-lib-iterate@link:libraries/iterate":
-  version "47.0.3"
+  version "47.1.0"
 
 "taskcluster-lib-loader@link:libraries/loader":
-  version "47.0.3"
+  version "47.1.0"
 
 "taskcluster-lib-monitor@link:libraries/monitor":
-  version "47.0.3"
+  version "47.1.0"
 
 "taskcluster-lib-postgres@link:libraries/postgres":
-  version "47.0.3"
+  version "47.1.0"
 
 "taskcluster-lib-pulse@link:libraries/pulse":
-  version "47.0.3"
+  version "47.1.0"
 
 "taskcluster-lib-references@link:libraries/references":
-  version "47.0.3"
+  version "47.1.0"
 
 taskcluster-lib-scopes@^11.0.0:
   version "11.0.0"
@@ -6836,7 +6836,7 @@ taskcluster-lib-scopes@^11.0.0:
     fast-json-stable-stringify "^2.1.0"
 
 "taskcluster-lib-testing@link:libraries/testing":
-  version "47.0.3"
+  version "47.1.0"
 
 taskcluster-lib-urls@^13.0.0:
   version "13.0.1"
@@ -6844,7 +6844,7 @@ taskcluster-lib-urls@^13.0.0:
   integrity sha512-WrhKMbiWmpPrB0vbzLZq4W35mhdPVLklZY+qrBoI7KQzFAjO/qsgS8ssHL6eYmvBf4fE7C+C9ZFxQpQOUynQvg==
 
 "taskcluster-lib-validate@link:libraries/validate":
-  version "47.0.3"
+  version "47.1.0"
 
 test-exclude@^6.0.0:
   version "6.0.0"
