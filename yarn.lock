@@ -2376,9 +2376,9 @@ cron-parser@4.7.0:
     luxon "^3.1.0"
 
 cronstrue@^2.24.0:
-  version "2.24.0"
-  resolved "https://registry.yarnpkg.com/cronstrue/-/cronstrue-2.24.0.tgz#4f8a82e29c1e062e79f6993570899743fc8e51a7"
-  integrity sha512-A1of24mAGz+OWrdGsxT9BOnDqn2ba182hie8Jx0UcEC2t+ZKtfAJxaFntKUgR7sIisU297fgHBSlNhMIfvAkSA==
+  version "2.26.0"
+  resolved "https://registry.yarnpkg.com/cronstrue/-/cronstrue-2.26.0.tgz#c07c579b51763e26d4fb5c2693f09d0686b7010a"
+  integrity sha512-M1VdV3hpBAsd1Zzvqcvf63wgDpcwCuS4WiNEVFpJ0s33MGO2sVDTfswYq0EPypCmESrCzmgL8h68DTzJuSDbVA==
 
 cross-env@^7.0.2:
   version "7.0.3"
@@ -6871,7 +6871,7 @@ tar-stream@^2.0.0:
     readable-stream "^3.1.1"
 
 "taskcluster-client@link:clients/client":
-  version "48.3.0"
+  version "49.0.0"
   dependencies:
     debug "^4.1.1"
     got "^11.8.1"
@@ -6881,37 +6881,37 @@ tar-stream@^2.0.0:
     taskcluster-lib-urls "^13.0.0"
 
 "taskcluster-db@link:db":
-  version "48.3.0"
+  version "49.0.0"
 
 "taskcluster-lib-api@link:libraries/api":
-  version "48.3.0"
+  version "49.0.0"
 
 "taskcluster-lib-app@link:libraries/app":
-  version "48.3.0"
+  version "49.0.0"
 
 "taskcluster-lib-azqueue@link:libraries/azqueue":
-  version "48.3.0"
+  version "49.0.0"
 
 "taskcluster-lib-config@link:libraries/config":
-  version "48.3.0"
+  version "49.0.0"
 
 "taskcluster-lib-iterate@link:libraries/iterate":
-  version "48.3.0"
+  version "49.0.0"
 
 "taskcluster-lib-loader@link:libraries/loader":
-  version "48.3.0"
+  version "49.0.0"
 
 "taskcluster-lib-monitor@link:libraries/monitor":
-  version "48.3.0"
+  version "49.0.0"
 
 "taskcluster-lib-postgres@link:libraries/postgres":
-  version "48.3.0"
+  version "49.0.0"
 
 "taskcluster-lib-pulse@link:libraries/pulse":
-  version "48.3.0"
+  version "49.0.0"
 
 "taskcluster-lib-references@link:libraries/references":
-  version "48.3.0"
+  version "49.0.0"
 
 taskcluster-lib-scopes@^11.0.0:
   version "11.0.0"
@@ -6921,7 +6921,7 @@ taskcluster-lib-scopes@^11.0.0:
     fast-json-stable-stringify "^2.1.0"
 
 "taskcluster-lib-testing@link:libraries/testing":
-  version "48.3.0"
+  version "49.0.0"
 
 taskcluster-lib-urls@^13.0.0:
   version "13.0.1"
@@ -6929,7 +6929,7 @@ taskcluster-lib-urls@^13.0.0:
   integrity sha512-WrhKMbiWmpPrB0vbzLZq4W35mhdPVLklZY+qrBoI7KQzFAjO/qsgS8ssHL6eYmvBf4fE7C+C9ZFxQpQOUynQvg==
 
 "taskcluster-lib-validate@link:libraries/validate":
-  version "48.3.0"
+  version "49.0.0"
 
 test-exclude@^6.0.0:
   version "6.0.0"
