@@ -6034,10 +6034,10 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-qlobber@^5.0.3:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/qlobber/-/qlobber-5.0.3.tgz#24728d6ba5382d502c7e09f6860b95a9c71615cd"
-  integrity sha512-wW4GTZPePyh0RgOsM18oDyOUlXfurVRgoNyJfS+y7VWPyd0GYhQp5T2tycZFZjonH+hngxIfklGJhTP/ghidgQ==
+qlobber@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/qlobber/-/qlobber-8.0.0.tgz#9de2ab7571e27c583573cd8809a9a90c276ca307"
+  integrity sha512-65me+m3B/1ZzibZRBBLcyoBIW3Po5MAR/ih/6pyzv7VaUTtmvupkxSXI07McVV8a7jNvcVLozruFTU6JxmQaXg==
 
 qs@6.11.0, qs@^6.10.1, qs@^6.11.0, qs@^6.7.0, qs@^6.9.4, qs@^6.9.6:
   version "6.11.0"
@@ -6871,7 +6871,7 @@ tar-stream@^2.0.0:
     readable-stream "^3.1.1"
 
 "taskcluster-client@link:clients/client":
-  version "48.3.0"
+  version "49.1.0"
   dependencies:
     debug "^4.1.1"
     got "^11.8.1"
@@ -6881,37 +6881,37 @@ tar-stream@^2.0.0:
     taskcluster-lib-urls "^13.0.0"
 
 "taskcluster-db@link:db":
-  version "48.3.0"
+  version "49.1.0"
 
 "taskcluster-lib-api@link:libraries/api":
-  version "48.3.0"
+  version "49.1.0"
 
 "taskcluster-lib-app@link:libraries/app":
-  version "48.3.0"
+  version "49.1.0"
 
 "taskcluster-lib-azqueue@link:libraries/azqueue":
-  version "48.3.0"
+  version "49.1.0"
 
 "taskcluster-lib-config@link:libraries/config":
-  version "48.3.0"
+  version "49.1.0"
 
 "taskcluster-lib-iterate@link:libraries/iterate":
-  version "48.3.0"
+  version "49.1.0"
 
 "taskcluster-lib-loader@link:libraries/loader":
-  version "48.3.0"
+  version "49.1.0"
 
 "taskcluster-lib-monitor@link:libraries/monitor":
-  version "48.3.0"
+  version "49.1.0"
 
 "taskcluster-lib-postgres@link:libraries/postgres":
-  version "48.3.0"
+  version "49.1.0"
 
 "taskcluster-lib-pulse@link:libraries/pulse":
-  version "48.3.0"
+  version "49.1.0"
 
 "taskcluster-lib-references@link:libraries/references":
-  version "48.3.0"
+  version "49.1.0"
 
 taskcluster-lib-scopes@^11.0.0:
   version "11.0.0"
@@ -6921,7 +6921,7 @@ taskcluster-lib-scopes@^11.0.0:
     fast-json-stable-stringify "^2.1.0"
 
 "taskcluster-lib-testing@link:libraries/testing":
-  version "48.3.0"
+  version "49.1.0"
 
 taskcluster-lib-urls@^13.0.0:
   version "13.0.1"
@@ -6929,7 +6929,7 @@ taskcluster-lib-urls@^13.0.0:
   integrity sha512-WrhKMbiWmpPrB0vbzLZq4W35mhdPVLklZY+qrBoI7KQzFAjO/qsgS8ssHL6eYmvBf4fE7C+C9ZFxQpQOUynQvg==
 
 "taskcluster-lib-validate@link:libraries/validate":
-  version "48.3.0"
+  version "49.1.0"
 
 test-exclude@^6.0.0:
   version "6.0.0"
