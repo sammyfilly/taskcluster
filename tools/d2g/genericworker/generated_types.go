@@ -373,6 +373,27 @@ type (
 		// Default:    true
 		LiveLog bool `json:"liveLog" default:"true"`
 
+		// Audio loopback device created using snd-aloop.
+		// An audio device will be available for the task. Its
+		// location will be passed to the task via environment
+		// variable `TASKCLUSTER_AUDIO_DEVICE<N>` with N in [0, 4],
+		// inclusive. The locations will /dev/snd/controlC<N>,
+		// /dev/snd/pcmC<N>D0c, /dev/snd/pcmC<N>D0p, /dev/snd/pcmC<N>D1c,
+		// /dev/snd/pcmC<N>D1p, respectively, where <N> is an integer
+		// between 0 and 31. The value of `<N>`
+		// is not static, and therefore either the environment
+		// variable should be used, or `/dev/snd` should be
+		// scanned in order to determine the correct location.
+		// Tasks should not assume a constant value.
+		//
+		// This feature is only available on Linux. If a task
+		// is submitted with this feature enabled on a non-Linux,
+		// posix platform (FreeBSD, macOS), the task will resolve as
+		// `exception/malformed-payload`.
+		//
+		// Since: generic-worker 54.4.0
+		LoopbackAudio bool `json:"loopbackAudio,omitempty"`
+
 		// Video loopback device created using v4l2loopback.
 		// A video device will be available for the task. Its
 		// location will be passed to the task via environment
@@ -1071,6 +1092,11 @@ func JSONSchema() string {
               "default": true,
               "description": "The live log feature streams the combined stderr and stdout to a task artifact\nso that the output is available while the task is running.\n\nSince: generic-worker 48.2.0",
               "title": "Enable [livelog](https://github.com/taskcluster/taskcluster/tree/main/tools/livelog)",
+              "type": "boolean"
+            },
+            "loopbackAudio": {
+              "description": "Audio loopback device created using snd-aloop.\nAn audio device will be available for the task. Its\nlocation will be passed to the task via environment\nvariable ` + "`" + `TASKCLUSTER_AUDIO_DEVICE\u003cN\u003e` + "`" + ` with N in [0, 4],\ninclusive. The locations will /dev/snd/controlC\u003cN\u003e,\n/dev/snd/pcmC\u003cN\u003eD0c, /dev/snd/pcmC\u003cN\u003eD0p, /dev/snd/pcmC\u003cN\u003eD1c,\n/dev/snd/pcmC\u003cN\u003eD1p, respectively, where \u003cN\u003e is an integer\nbetween 0 and 31. The value of ` + "`" + `\u003cN\u003e` + "`" + `\nis not static, and therefore either the environment\nvariable should be used, or ` + "`" + `/dev/snd` + "`" + ` should be\nscanned in order to determine the correct location.\nTasks should not assume a constant value.\n\nThis feature is only available on Linux. If a task\nis submitted with this feature enabled on a non-Linux,\nposix platform (FreeBSD, macOS), the task will resolve as\n` + "`" + `exception/malformed-payload` + "`" + `.\n\nSince: generic-worker 54.4.0",
+              "title": "Loopback Audio device",
               "type": "boolean"
             },
             "loopbackVideo": {

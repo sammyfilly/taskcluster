@@ -7942,6 +7942,11 @@
               "title": "Enable [livelog](https://github.com/taskcluster/taskcluster/tree/main/tools/livelog)",
               "type": "boolean"
             },
+            "loopbackAudio": {
+              "description": "Audio loopback device created using snd-aloop.\nAn audio device will be available for the task. Its\nlocation will be passed to the task via environment\nvariable `TASKCLUSTER_AUDIO_DEVICE<N>` with N in [0, 4],\ninclusive. The locations will /dev/snd/controlC<N>,\n/dev/snd/pcmC<N>D0c, /dev/snd/pcmC<N>D0p, /dev/snd/pcmC<N>D1c,\n/dev/snd/pcmC<N>D1p, respectively, where <N> is an integer\nbetween 0 and 31. The value of `<N>`\nis not static, and therefore either the environment\nvariable should be used, or `/dev/snd` should be\nscanned in order to determine the correct location.\nTasks should not assume a constant value.\n\nThis feature is only available on Linux. If a task\nis submitted with this feature enabled on a non-Linux,\nposix platform (FreeBSD, macOS), the task will resolve as\n`exception/malformed-payload`.\n\nSince: generic-worker 54.4.0",
+              "title": "Loopback Audio device",
+              "type": "boolean"
+            },
             "loopbackVideo": {
               "description": "Video loopback device created using v4l2loopback.\nA video device will be available for the task. Its\nlocation will be passed to the task via environment\nvariable `TASKCLUSTER_VIDEO_DEVICE`. The\nlocation will be `/dev/video<N>` where `<N>` is\nan integer between 0 and 255. The value of `<N>`\nis not static, and therefore either the environment\nvariable should be used, or `/dev` should be\nscanned in order to determine the correct location.\nTasks should not assume a constant value.\n\nThis feature is only available on Linux. If a task\nis submitted with this feature enabled on a non-Linux,\nposix platform (FreeBSD, macOS), the task will resolve as\n`exception/malformed-payload`.\n\nSince: generic-worker 53.1.0",
               "title": "Loopback Video device",
@@ -8864,6 +8869,11 @@
                   "default": true,
                   "description": "The live log feature streams the combined stderr and stdout to a task artifact\nso that the output is available while the task is running.\n\nSince: generic-worker 48.2.0",
                   "title": "Enable [livelog](https://github.com/taskcluster/taskcluster/tree/main/tools/livelog)",
+                  "type": "boolean"
+                },
+                "loopbackAudio": {
+                  "description": "Audio loopback device created using snd-aloop.\nAn audio device will be available for the task. Its\nlocation will be passed to the task via environment\nvariable `TASKCLUSTER_AUDIO_DEVICE<N>` with N in [0, 4],\ninclusive. The locations will /dev/snd/controlC<N>,\n/dev/snd/pcmC<N>D0c, /dev/snd/pcmC<N>D0p, /dev/snd/pcmC<N>D1c,\n/dev/snd/pcmC<N>D1p, respectively, where <N> is an integer\nbetween 0 and 31. The value of `<N>`\nis not static, and therefore either the environment\nvariable should be used, or `/dev/snd` should be\nscanned in order to determine the correct location.\nTasks should not assume a constant value.\n\nThis feature is only available on Linux. If a task\nis submitted with this feature enabled on a non-Linux,\nposix platform (FreeBSD, macOS), the task will resolve as\n`exception/malformed-payload`.\n\nSince: generic-worker 54.4.0",
+                  "title": "Loopback Audio device",
                   "type": "boolean"
                 },
                 "loopbackVideo": {

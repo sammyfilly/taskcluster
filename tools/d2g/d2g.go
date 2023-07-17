@@ -355,6 +355,13 @@ func createVolumeMountsString(dwPayload *dockerworker.DockerWorkerPayload, wdcs 
 	if dwPayload.Capabilities.Devices.LoopbackVideo {
 		volumeMounts.WriteString(` -v "${TASKCLUSTER_VIDEO_DEVICE}:/dev/video0"`)
 	}
+	if dwPayload.Capabilities.Devices.LoopbackAudio {
+		volumeMounts.WriteString(` -v "${TASKCLUSTER_AUDIO_DEVICE0}:/dev/snd/controlC0"`)
+		volumeMounts.WriteString(` -v "${TASKCLUSTER_AUDIO_DEVICE1}:/dev/snd/pcmC0D0c"`)
+		volumeMounts.WriteString(` -v "${TASKCLUSTER_AUDIO_DEVICE2}:/dev/snd/pcmC0D0p"`)
+		volumeMounts.WriteString(` -v "${TASKCLUSTER_AUDIO_DEVICE3}:/dev/snd/pcmC0D1c"`)
+		volumeMounts.WriteString(` -v "${TASKCLUSTER_AUDIO_DEVICE4}:/dev/snd/pcmC0D1p"`)
+	}
 	return volumeMounts.String()
 }
 
