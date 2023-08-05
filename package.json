@@ -141,7 +141,7 @@
     "github-slugger": "^1.2.1",
     "glob": "^8.0.3",
     "graphql-tag": "^2.10.1",
-    "inquirer": "^8.0.0",
+    "inquirer": "^9.0.0",
     "is-uuid": "^1.0.2",
     "json-stable-stringify": "^1.0.1",
     "markdown-table": "^2.0.0",
