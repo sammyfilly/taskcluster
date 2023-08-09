@@ -61,26 +61,22 @@ class BaseClient(object):
         if not o.get('rootUrl'):
             raise exceptions.TaskclusterFailure('rootUrl option is required')
 
-        credentials = o.get('credentials')
-        if credentials:
+        if credentials := o.get('credentials'):
             for x in ('accessToken', 'clientId', 'certificate'):
                 value = credentials.get(x)
                 if value and not isinstance(value, bytes):
                     try:
                         credentials[x] = credentials[x].encode('ascii')
                     except Exception:
-                        s = '%s (%s) must be unicode encodable' % (x, credentials[x])
+                        s = f'{x} ({credentials[x]}) must be unicode encodable'
                         raise exceptions.TaskclusterAuthFailure(s)
 
         self.options = o
         if 'credentials' in o:
             log.debug('credentials key scrubbed from logging output')
-        log.debug(dict((k, v) for k, v in o.items() if k != 'credentials'))
+        log.debug({k: v for k, v in o.items() if k != 'credentials'})
 
-        if session:
-            self.session = session
-        else:
-            self.session = self._createSession()
+        self.session = session if session else self._createSession()
 
     def _createSession(self):
         """ Create a requests session.
@@ -93,27 +89,25 @@ class BaseClient(object):
         """ Make an 'ext' for Hawk authentication """
         o = self.options
         c = o.get('credentials', {})
-        if c.get('clientId') and c.get('accessToken'):
-            ext = {}
-            cert = c.get('certificate')
-            if cert:
-                if isinstance(cert, bytes):
-                    cert = cert.decode()
-                if isinstance(cert, str):
-                    cert = json.loads(cert)
-                ext['certificate'] = cert
-
-            if 'authorizedScopes' in o:
-                ext['authorizedScopes'] = o['authorizedScopes']
-
-            # .encode('base64') inserts a newline, which hawk doesn't
-            # like but doesn't strip itself
-            return utils.makeB64UrlSafe(utils.encodeStringForB64Header(utils.dumpJson(ext)).strip())
-        else:
+        if not c.get('clientId') or not c.get('accessToken'):
             return {}
+        ext = {}
+        if cert := c.get('certificate'):
+            if isinstance(cert, bytes):
+                cert = cert.decode()
+            if isinstance(cert, str):
+                cert = json.loads(cert)
+            ext['certificate'] = cert
+
+        if 'authorizedScopes' in o:
+            ext['authorizedScopes'] = o['authorizedScopes']
+
+        # .encode('base64') inserts a newline, which hawk doesn't
+        # like but doesn't strip itself
+        return utils.makeB64UrlSafe(utils.encodeStringForB64Header(utils.dumpJson(ext)).strip())
 
     def _makeTopicExchange(self, entry, *args, **kwargs):
-        if len(args) == 0 and not kwargs:
+        if not args and not kwargs:
             routingKeyPattern = {}
         elif len(args) >= 1:
             if kwargs or len(args) != 1:
@@ -124,8 +118,7 @@ class BaseClient(object):
             routingKeyPattern = kwargs
 
         data = {
-            'exchange': '%s/%s' % (self.options['exchangePrefix'].rstrip('/'),
-                                   entry['exchange'].lstrip('/'))
+            'exchange': f"{self.options['exchangePrefix'].rstrip('/')}/{entry['exchange'].lstrip('/')}"
         }
 
         # If we are passed in a string, we can short-circuit this function
@@ -168,11 +161,12 @@ class BaseClient(object):
         entry = self.funcinfo.get(methodName)
         if not entry:
             raise exceptions.TaskclusterFailure(
-                'Requested method "%s" not found in API Reference' % methodName)
+                f'Requested method "{methodName}" not found in API Reference'
+            )
         routeParams, _, query, _, _ = self._processArgs(entry, *args, **kwargs)
         route = self._subArgsInRoute(entry, routeParams)
         if query:
-            route += '?' + urllib.parse.urlencode(query)
+            route += f'?{urllib.parse.urlencode(query)}'
         return liburls.api(self.options['rootUrl'], self.serviceName, self.apiVersion, route)
 
     def buildSignedUrl(self, methodName, *args, **kwargs):
@@ -231,7 +225,7 @@ class BaseClient(object):
         qs = u.query
         if qs:
             qs += '&'
-        qs += 'bewit=%s' % bewit
+        qs += f'bewit={bewit}'
 
         return urllib.parse.urlunparse((
             u.scheme,
@@ -262,17 +256,14 @@ class BaseClient(object):
         if paginationLimit and 'limit' in entry.get('query', []):
             query['limit'] = paginationLimit
 
-        if query:
-            _route = route + '?' + urllib.parse.urlencode(query)
-        else:
-            _route = route
+        _route = f'{route}?{urllib.parse.urlencode(query)}' if query else route
         response = self._makeHttpRequest(entry['method'], _route, payload)
 
         if paginationHandler:
             paginationHandler(response)
             while response.get('continuationToken'):
                 query['continuationToken'] = response['continuationToken']
-                _route = route + '?' + urllib.parse.urlencode(query)
+                _route = f'{route}?{urllib.parse.urlencode(query)}'
                 response = self._makeHttpRequest(entry['method'], _route, payload)
                 paginationHandler(response)
         else:
@@ -301,7 +292,7 @@ class BaseClient(object):
         #   1. method(v1, v1, payload)
         #   2. method(payload, k1=v1, k2=v2)
         #   3. method(payload=payload, query=query, params={k1: v1, k2: v2})
-        if len(kwargs) == 0:
+        if not kwargs:
             if 'input' in entry and len(args) == len(reqArgs) + 1:
                 payload = args.pop()
             if len(args) != len(reqArgs):
@@ -322,10 +313,8 @@ class BaseClient(object):
                         break
                 if 'input' in entry and len(args) != 1:
                     isFlatKwargs = False
-                if 'input' not in entry and len(args) != 0:
+                if 'input' not in entry and args:
                     isFlatKwargs = False
-                else:
-                    pass  # We're using payload=, query= and param=
             else:
                 isFlatKwargs = False
 
@@ -356,14 +345,16 @@ class BaseClient(object):
         for arg in args:
             if not isinstance(arg, str) and not isinstance(arg, int):
                 raise exceptions.TaskclusterFailure(
-                    'Positional arg "%s" to %s is not a string or int' % (arg, entry['name']))
+                    f"""Positional arg "{arg}" to {entry['name']} is not a string or int"""
+                )
 
         for name, arg in kwApiArgs.items():
             if not isinstance(arg, str) and not isinstance(arg, int):
                 raise exceptions.TaskclusterFailure(
-                    'KW arg "%s: %s" to %s is not a string or int' % (name, arg, entry['name']))
+                    f"""KW arg "{name}: {arg}" to {entry['name']} is not a string or int"""
+                )
 
-        if len(args) > 0 and len(kwApiArgs) > 0:
+        if args and len(kwApiArgs) > 0:
             raise exceptions.TaskclusterFailure('Specify either positional or key word arguments')
 
         # We know for sure that if we don't give enough arguments that the call
@@ -382,30 +373,23 @@ class BaseClient(object):
             raise exceptions.TaskclusterFailure('%s called with too many positional args',
                                                 entry['name'])
 
-        i = 0
-        for arg in args:
+        for i, arg in enumerate(args):
             log.debug('Found a positional argument: %s', arg)
             routeParams[reqArgs[i]] = arg
-            i += 1
-
         log.debug('After processing positional arguments, we have: %s', routeParams)
 
-        routeParams.update(kwApiArgs)
+        routeParams |= kwApiArgs
 
         log.debug('After keyword arguments, we have: %s', routeParams)
 
         if len(reqArgs) != len(routeParams):
-            errMsg = '%s takes %s args, %s given' % (
-                entry['name'],
-                ','.join(reqArgs),
-                routeParams.keys())
+            errMsg = f"{entry['name']} takes {','.join(reqArgs)} args, {routeParams.keys()} given"
             log.error(errMsg)
             raise exceptions.TaskclusterFailure(errMsg)
 
         for reqArg in reqArgs:
             if reqArg not in routeParams:
-                errMsg = '%s requires a "%s" argument which was not provided' % (
-                    entry['name'], reqArg)
+                errMsg = f"""{entry['name']} requires a "{reqArg}" argument which was not provided"""
                 log.error(errMsg)
                 raise exceptions.TaskclusterFailure(errMsg)
 
@@ -419,12 +403,13 @@ class BaseClient(object):
         route = entry['route']
 
         for arg, val in args.items():
-            toReplace = "<%s>" % arg
+            toReplace = f"<{arg}>"
             if toReplace not in route:
                 raise exceptions.TaskclusterFailure(
-                    'Arg %s not found in route for %s' % (arg, entry['name']))
+                    f"Arg {arg} not found in route for {entry['name']}"
+                )
             val = urllib.parse.quote(str(val).encode("utf-8"), '')
-            route = route.replace("<%s>" % arg, val)
+            route = route.replace(f"<{arg}>", val)
 
         return route.lstrip('/')
 
@@ -490,7 +475,7 @@ class BaseClient(object):
                 response = utils.makeSingleHttpRequest(method, url, payload, headers)
             except requests.exceptions.RequestException as rerr:
                 if retry < retries:
-                    log.warning('Retrying because of: %s' % rerr)
+                    log.warning(f'Retrying because of: {rerr}')
                     continue
                 # raise a connection exception
                 raise exceptions.TaskclusterConnectionError(
@@ -505,8 +490,8 @@ class BaseClient(object):
 
             # Catch retryable errors and go to the beginning of the loop
             # to do the retry
-            if 500 <= status and status < 600 and retry < retries:
-                log.warning('Retrying because of a %s status code' % status)
+            if status >= 500 and status < 600 and retry < retries:
+                log.warning(f'Retrying because of a {status} status code')
                 continue
 
             # Throw errors for non-retryable errors
@@ -520,11 +505,10 @@ class BaseClient(object):
                 message = "Unknown Server Error"
                 if isinstance(data, dict):
                     message = data.get('message')
-                else:
-                    if status == 401:
-                        message = "Authentication Error"
-                    elif status == 500:
-                        message = "Internal Server Error"
+                elif status == 401:
+                    message = "Authentication Error"
+                elif status == 500:
+                    message = "Internal Server Error"
                 # Raise TaskclusterAuthFailure if this is an auth issue
                 if status == 401:
                     raise exceptions.TaskclusterAuthFailure(
@@ -582,22 +566,23 @@ def createApiClient(name, api):
                 def apiCall(self, *args, **kwargs):
                     return self._makeApiCall(e, *args, **kwargs)
                 return apiCall
+
             f = addApiCall(entry)
 
-            docStr = "Call the %s api's %s method.  " % (name, entry['name'])
+            docStr = f"Call the {name} api's {entry['name']} method.  "
 
             if entry['args'] and len(entry['args']) > 0:
                 docStr += "This method takes:\n\n"
-                docStr += '\n'.join(['- ``%s``' % x for x in entry['args']])
+                docStr += '\n'.join([f'- ``{x}``' for x in entry['args']])
                 docStr += '\n\n'
             else:
                 docStr += "This method takes no arguments.  "
 
             if 'input' in entry:
-                docStr += "This method takes input ``%s``.  " % entry['input']
+                docStr += f"This method takes input ``{entry['input']}``.  "
 
             if 'output' in entry:
-                docStr += "This method gives output ``%s``" % entry['output']
+                docStr += f"This method gives output ``{entry['output']}``"
 
             docStr += '\n\nThis method does a ``%s`` to ``%s``.' % (
                 entry['method'].upper(), entry['route'])
@@ -613,14 +598,14 @@ def createApiClient(name, api):
 
             f = addTopicExchange(entry)
 
-            docStr = 'Generate a routing key pattern for the %s exchange.  ' % entry['exchange']
+            docStr = f"Generate a routing key pattern for the {entry['exchange']} exchange.  "
             docStr += 'This method takes a given routing key as a string or a '
             docStr += 'dictionary.  For each given dictionary key, the corresponding '
             docStr += 'routing key token takes its value.  For routing key tokens '
             docStr += 'which are not specified by the dictionary, the * or # character '
             docStr += 'is used depending on whether or not the key allows multiple words.\n\n'
             docStr += 'This exchange takes the following keys:\n\n'
-            docStr += '\n'.join(['- ``%s``' % x['name'] for x in entry['routingKey']])
+            docStr += '\n'.join([f"- ``{x['name']}``" for x in entry['routingKey']])
 
             f.__doc__ = docStr
 
@@ -674,10 +659,12 @@ def createTemporaryCredentials(clientId, accessToken, start, expiry, scopes, nam
 
     sig = ['version:' + utils.toStr(cert['version'])]
     if name:
-        sig.extend([
-            'clientId:' + utils.toStr(name),
-            'issuer:' + utils.toStr(clientId),
-        ])
+        sig.extend(
+            [
+                f'clientId:{utils.toStr(name)}',
+                f'issuer:{utils.toStr(clientId)}',
+            ]
+        )
     sig.extend([
         'seed:' + utils.toStr(cert['seed']),
         'start:' + utils.toStr(cert['start']),

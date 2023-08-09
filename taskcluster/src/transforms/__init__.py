@@ -72,7 +72,9 @@ def add_task_env(config, tasks):
         env["GITHUB_SHA"] = config.params["head_rev"]
 
         # These were for codecov, but are handy to see anyway
-        env["CI_BUILD_URL"] = "{}/tasks/{}".format(os.environ.get("TASKCLUSTER_ROOT_URL"), os.environ.get("TASK_ID"))
+        env[
+            "CI_BUILD_URL"
+        ] = f'{os.environ.get("TASKCLUSTER_ROOT_URL")}/tasks/{os.environ.get("TASK_ID")}'
         env["GIT_BRANCH"] = config.params["head_ref"]
 
         # Passing through some things the decision task wants to child tasks
@@ -102,16 +104,17 @@ def podman_run(config, tasks):
     for task in tasks:
         env = task["worker"].setdefault("env", {})
 
-        managed_env = {}
-        managed_env["RUN_ID"] = "${{RUN_ID}}"
-        managed_env["TASKCLUSTER_ROOT_URL"] = "${{TASKCLUSTER_ROOT_URL}}"
-        managed_env["TASK_ID"] = "${{TASK_ID}}"
-        managed_env["TASKCLUSTER_WORKER_LOCATION"] = "${{TASKCLUSTER_WORKER_LOCATION}}"
+        managed_env = {
+            "RUN_ID": "${{RUN_ID}}",
+            "TASKCLUSTER_ROOT_URL": "${{TASKCLUSTER_ROOT_URL}}",
+            "TASK_ID": "${{TASK_ID}}",
+            "TASKCLUSTER_WORKER_LOCATION": "${{TASKCLUSTER_WORKER_LOCATION}}",
+        }
         taskcluster_proxy = task["worker"].get("taskcluster-proxy")
         if taskcluster_proxy:
             managed_env["TASKCLUSTER_PROXY_URL"] = "${{TASKCLUSTER_PROXY_URL}}"
 
-        managed_env.update(env)
+        managed_env |= env
 
         has_artifacts = task["worker"].get("artifacts")
 
@@ -152,8 +155,7 @@ def direct_dependencies(config, tasks):
 def parameterize_mounts(config, tasks):
     node_version, go_version, golangci_lint_version, rust_version, _ = _dependency_versions()
     for task in tasks:
-        mounts = task.get("worker", {}).get("mounts")
-        if mounts:
+        if mounts := task.get("worker", {}).get("mounts"):
             for mount in mounts:
                 if mount["content"].get("url"):
                     mount["content"]["url"] = mount["content"]["url"].format(
@@ -174,8 +176,7 @@ def parameterize_mounts(config, tasks):
 def parameterize_artifacts(config, tasks):
     node_version, go_version, golangci_lint_version, rust_version, _ = _dependency_versions()
     for task in tasks:
-        artifacts = task.get("worker", {}).get("artifacts")
-        if artifacts:
+        if artifacts := task.get("worker", {}).get("artifacts"):
             for artifact in artifacts:
                 artifact["path"] = artifact["path"].format(
                     go_version=go_version[2:],

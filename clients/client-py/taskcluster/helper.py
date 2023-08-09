@@ -72,9 +72,7 @@ class TaskclusterConfig(object):
 
         client_importer = _async_client_importer if use_async else _client_importer
         service = getattr(client_importer, service_name.capitalize(), None)
-        assert service is not None, "Invalid Taskcluster service {}".format(
-            service_name
-        )
+        assert service is not None, f"Invalid Taskcluster service {service_name}"
         return service(self.options)
 
     def load_secrets(
@@ -117,7 +115,7 @@ def load_secrets(
     """
     secrets = {}
     if existing:
-        secrets.update(existing)
+        secrets |= existing
 
     if isinstance(local_secrets, dict):
         # Use local secrets file to avoid using Taskcluster secrets
@@ -126,13 +124,13 @@ def load_secrets(
     else:
         # Use Taskcluster secret service
         assert secret_name is not None, "Missing Taskcluster secret secret_name"
-        all_secrets = secrets_service.get(secret_name).get("secret", dict())
-        logger.info("Loaded Taskcluster secret {}".format(secret_name))
+        all_secrets = secrets_service.get(secret_name).get("secret", {})
+        logger.info(f"Loaded Taskcluster secret {secret_name}")
 
     if prefixes:
         # Use secrets behind supported prefixes
         for prefix in prefixes:
-            secrets.update(all_secrets.get(prefix, dict()))
+            secrets.update(all_secrets.get(prefix, {}))
 
     else:
         # Use all secrets available
@@ -141,7 +139,7 @@ def load_secrets(
     # Check required secrets
     for required_secret in required:
         if required_secret not in secrets:
-            raise Exception("Missing value {} in secrets.".format(required_secret))
+            raise Exception(f"Missing value {required_secret} in secrets.")
 
     return secrets
 
@@ -155,7 +153,7 @@ def upload_artifact(queue_service, artifact_path, content, content_type, ttl):
     proxy = os.environ.get("TASKCLUSTER_PROXY_URL")
     assert task_id and run_id and proxy, "Can only run in Taskcluster tasks with proxy"
     # Contet can be str or bytes
-    assert isinstance(content, str) or isinstance(content, bytes)
+    assert isinstance(content, (str, bytes))
     assert isinstance(ttl, datetime.timedelta)
 
     # Create S3 artifact on Taskcluster

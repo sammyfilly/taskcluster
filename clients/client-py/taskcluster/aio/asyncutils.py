@@ -37,7 +37,7 @@ async def makeHttpRequest(method, url, payload, headers, retries=utils.MAX_RETRI
             retry += 1
             # if this isn't the first retry then we sleep
             if retry > 0:
-                snooze = float(retry * retry) / 10.0
+                snooze = float(retry**2) / 10.0
                 log.info('Sleeping %0.2f seconds for exponential backoff', snooze)
                 await asyncio.sleep(snooze)
 
@@ -51,7 +51,7 @@ async def makeHttpRequest(method, url, payload, headers, retries=utils.MAX_RETRI
                     response = await makeSingleHttpRequest(method, url, payload, headers, session)
             except aiohttp.ClientError as rerr:
                 if retry < retries:
-                    log.warning('Retrying because of: %s' % rerr)
+                    log.warning(f'Retrying because of: {rerr}')
                     continue
                 # raise a connection exception
                 raise rerr
@@ -79,8 +79,8 @@ async def makeHttpRequest(method, url, payload, headers, retries=utils.MAX_RETRI
 async def makeSingleHttpRequest(method, url, payload, headers, session=None):
     method = method.upper()
     log.debug('Making a %s request to %s', method, url)
-    log.debug('HTTP Headers: %s' % str(headers))
-    log.debug('HTTP Payload: %s (limit 100 char)' % str(payload)[:100])
+    log.debug(f'HTTP Headers: {str(headers)}')
+    log.debug(f'HTTP Payload: {str(payload)[:100]} (limit 100 char)')
     implicit = False
     if session is None:
         implicit = True
@@ -93,14 +93,15 @@ async def makeSingleHttpRequest(method, url, payload, headers, session=None):
         # we must avoid aiohttp's helpful "requoting" functionality, as it breaks Hawk signatures
         url = aiohttp.client.URL(url, encoded=True)
         async with session.request(
-            method, url, data=payload, headers=headers,
-            skip_auto_headers=skip_auto_headers, compress=False
-        ) as resp:
+                    method, url, data=payload, headers=headers,
+                    skip_auto_headers=skip_auto_headers, compress=False
+                ) as resp:
             response_text = await resp.text()
-            log.debug('Received HTTP Status:    %s' % resp.status)
-            log.debug('Received HTTP Headers: %s' % str(resp.headers))
-            log.debug('Received HTTP Payload: %s (limit 1024 char)' %
-                      str(response_text)[:1024])
+            log.debug(f'Received HTTP Status:    {resp.status}')
+            log.debug(f'Received HTTP Headers: {str(resp.headers)}')
+            log.debug(
+                f'Received HTTP Payload: {str(response_text)[:1024]} (limit 1024 char)'
+            )
             return resp
     finally:
         if implicit:

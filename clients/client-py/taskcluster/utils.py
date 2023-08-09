@@ -54,10 +54,7 @@ def calculateSleepTime(attempt):
 
 
 def toStr(obj, encoding='utf-8'):
-    if isinstance(obj, bytes):
-        obj = obj.decode(encoding)
-    else:
-        obj = str(obj)
+    obj = obj.decode(encoding) if isinstance(obj, bytes) else str(obj)
     return obj
 
 
@@ -80,14 +77,11 @@ def fromNow(offset, dateObj=None):
     # Parse offset
     m = r.match(offset)
     if m is None:
-        raise ValueError("offset string: '%s' does not parse" % offset)
+        raise ValueError(f"offset string: '{offset}' does not parse")
 
     # In order to calculate years and months we need to calculate how many days
     # to offset the offset by, since timedelta only goes as high as weeks
     days = 0
-    hours = 0
-    minutes = 0
-    seconds = 0
     if m.group('years'):
         years = int(m.group('years'))
         days += 365 * years
@@ -95,10 +89,9 @@ def fromNow(offset, dateObj=None):
         months = int(m.group('months'))
         days += 30 * months
     days += int(m.group('days') or 0)
-    hours += int(m.group('hours') or 0)
-    minutes += int(m.group('minutes') or 0)
-    seconds += int(m.group('seconds') or 0)
-
+    hours = 0 + int(m.group('hours') or 0)
+    minutes = 0 + int(m.group('minutes') or 0)
+    seconds = 0 + int(m.group('seconds') or 0)
     # Offset datetime from utc
     delta = datetime.timedelta(
         weeks=int(m.group('weeks') or 0),
@@ -128,10 +121,11 @@ def dumpJson(obj, **kwargs):
     def handleDateAndBinaryForJs(x):
         if isinstance(x, bytes):
             x = x.decode()
-        if isinstance(x, datetime.datetime) or isinstance(x, datetime.date):
+        if isinstance(x, (datetime.datetime, datetime.date)):
             return stringDate(x)
         else:
             return x
+
     d = json.dumps(obj, separators=(',', ':'), default=handleDateAndBinaryForJs, **kwargs)
     assert '\n' not in d
     return d
@@ -145,9 +139,9 @@ def stringDate(date):
     # This is just to be fully compliant with:
     # https://tools.ietf.org/html/rfc3339#section-5.6
     if string.endswith('+00:00'):
-        return string[:-6] + 'Z'
+        return f'{string[:-6]}Z'
     if date.utcoffset() is None and string[-1] != 'Z':
-        return string + 'Z'
+        return f'{string}Z'
     return string
 
 
@@ -248,7 +242,7 @@ def makeHttpRequest(method, url, payload, headers, retries=MAX_RETRIES, session=
         retry += 1
         # if this isn't the first retry then we sleep
         if retry > 0:
-            snooze = float(retry * retry) / 10.0
+            snooze = float(retry**2) / 10.0
             log.info('Sleeping %0.2f seconds for exponential backoff', snooze)
             time.sleep(snooze)
 
@@ -261,7 +255,7 @@ def makeHttpRequest(method, url, payload, headers, retries=MAX_RETRIES, session=
             response = makeSingleHttpRequest(method, url, payload, headers, session)
         except requests.exceptions.RequestException as rerr:
             if retry < retries:
-                log.warning('Retrying because of: %s' % rerr)
+                log.warning(f'Retrying because of: {rerr}')
                 continue
             # raise a connection exception
             raise rerr
@@ -271,12 +265,9 @@ def makeHttpRequest(method, url, payload, headers, retries=MAX_RETRIES, session=
         except requests.exceptions.RequestException:
             pass
         status = response.status_code
-        if 500 <= status and status < 600 and retry < retries:
-            if retry < retries:
-                log.warn('Retrying because of: %d status' % status)
-                continue
-            else:
-                raise exceptions.TaskclusterRestFailure("Unknown Server Error", superExc=None)
+        if status >= 500 and status < 600 and retry < retries:
+            log.warn('Retrying because of: %d status' % status)
+            continue
         return response
 
     # This code-path should be unreachable
@@ -286,12 +277,12 @@ def makeHttpRequest(method, url, payload, headers, retries=MAX_RETRIES, session=
 def makeSingleHttpRequest(method, url, payload, headers, session=None):
     method = method.upper()
     log.debug('Making a %s request to %s', method, url)
-    log.debug('HTTP Headers: %s' % str(headers))
-    log.debug('HTTP Payload: %s (limit 100 char)' % str(payload)[:100])
+    log.debug(f'HTTP Headers: {str(headers)}')
+    log.debug(f'HTTP Payload: {str(payload)[:100]} (limit 100 char)')
     obj = session if session else requests
     response = obj.request(method.upper(), url, data=payload, headers=headers, allow_redirects=False)
-    log.debug('Received HTTP Status:    %s' % response.status_code)
-    log.debug('Received HTTP Headers: %s' % str(response.headers))
+    log.debug(f'Received HTTP Status:    {response.status_code}')
+    log.debug(f'Received HTTP Headers: {str(response.headers)}')
 
     return response
 
@@ -328,20 +319,16 @@ def optionsFromEnvironment(defaults=None):
     options = defaults or {}
     credentials = options.get('credentials', {})
 
-    rootUrl = os.environ.get('TASKCLUSTER_ROOT_URL')
-    if rootUrl:
+    if rootUrl := os.environ.get('TASKCLUSTER_ROOT_URL'):
         options['rootUrl'] = liburls.normalize_root_url(rootUrl)
 
-    clientId = os.environ.get('TASKCLUSTER_CLIENT_ID')
-    if clientId:
+    if clientId := os.environ.get('TASKCLUSTER_CLIENT_ID'):
         credentials['clientId'] = clientId
 
-    accessToken = os.environ.get('TASKCLUSTER_ACCESS_TOKEN')
-    if accessToken:
+    if accessToken := os.environ.get('TASKCLUSTER_ACCESS_TOKEN'):
         credentials['accessToken'] = accessToken
 
-    certificate = os.environ.get('TASKCLUSTER_CERTIFICATE')
-    if certificate:
+    if certificate := os.environ.get('TASKCLUSTER_CERTIFICATE'):
         credentials['certificate'] = certificate
 
     if credentials:

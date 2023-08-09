@@ -49,27 +49,22 @@ def apiRef(mocker):
         base.createApiEntryFunction('NEVER_CALL_ME', 0, False),
         topicEntry
     ]
-    apiRef = base.createApiRef(entries=entries)
-
-    yield apiRef
+    yield base.createApiRef(entries=entries)
 
 
 @pytest.fixture(scope='function')
 def clientClass(apiRef):
-    clientClass = subject.createApiClient('testApi', apiRef)
-    yield clientClass
+    yield subject.createApiClient('testApi', apiRef)
 
 
 @pytest.fixture(scope='function')
 def client(clientClass):
-    client = clientClass({'rootUrl': base.TEST_ROOT_URL})
-    yield client
+    yield clientClass({'rootUrl': base.TEST_ROOT_URL})
 
 
 @pytest.fixture(scope='function')
 def patcher(client):
-    patcher = mock.patch.object(client, 'NEVER_CALL_ME')
-    yield patcher
+    yield mock.patch.object(client, 'NEVER_CALL_ME')
 
 
 def test_baseUrl_not_allowed(clientClass):
@@ -386,7 +381,10 @@ def test_success_fifth_try_status_code(client, apiPath):
             ObjWithDotJson(200, expected)
         ]
         p.side_effect = sideEffect
-        expectedCalls = [mock.call('GET', apiPath, None, mock.ANY) for x in range(client.options['maxRetries'])]
+        expectedCalls = [
+            mock.call('GET', apiPath, None, mock.ANY)
+            for _ in range(client.options['maxRetries'])
+        ]
 
         v = client._makeHttpRequest('GET', 'test', None)
         p.assert_has_calls(expectedCalls)
@@ -411,7 +409,10 @@ def test_exhaust_retries_try_status_code(client, apiPath):
             ObjWithDotJson(200, {'got this': 'wrong'})
         ]
         p.side_effect = sideEffect
-        expectedCalls = [mock.call('GET', apiPath, None, mock.ANY) for x in range(client.options['maxRetries'] + 1)]
+        expectedCalls = [
+            mock.call('GET', apiPath, None, mock.ANY)
+            for _ in range(client.options['maxRetries'] + 1)
+        ]
 
         with pytest.raises(exc.TaskclusterRestFailure):
             try:
@@ -435,7 +436,10 @@ def test_success_fifth_try_connection_errors(client, apiPath):
             ObjWithDotJson(200, expected)
         ]
         p.side_effect = sideEffect
-        expectedCalls = [mock.call('GET', apiPath, None, mock.ANY) for x in range(client.options['maxRetries'])]
+        expectedCalls = [
+            mock.call('GET', apiPath, None, mock.ANY)
+            for _ in range(client.options['maxRetries'])
+        ]
 
         v = client._makeHttpRequest('GET', 'test', None)
         p.assert_has_calls(expectedCalls)
@@ -445,7 +449,10 @@ def test_success_fifth_try_connection_errors(client, apiPath):
 def test_failure_status_code(client, apiPath):
     with mock.patch.object(utils, 'makeSingleHttpRequest') as p:
         p.return_value = ObjWithDotJson(500, None)
-        expectedCalls = [mock.call('GET', apiPath, None, mock.ANY) for x in range(client.options['maxRetries'])]
+        expectedCalls = [
+            mock.call('GET', apiPath, None, mock.ANY)
+            for _ in range(client.options['maxRetries'])
+        ]
         with pytest.raises(exc.TaskclusterRestFailure):
             client._makeHttpRequest('GET', 'test', None)
         p.assert_has_calls(expectedCalls)
@@ -454,7 +461,10 @@ def test_failure_status_code(client, apiPath):
 def test_failure_connection_errors(client, apiPath):
     with mock.patch.object(utils, 'makeSingleHttpRequest') as p:
         p.side_effect = requests.exceptions.RequestException
-        expectedCalls = [mock.call('GET', apiPath, None, mock.ANY) for x in range(client.options['maxRetries'])]
+        expectedCalls = [
+            mock.call('GET', apiPath, None, mock.ANY)
+            for _ in range(client.options['maxRetries'])
+        ]
         with pytest.raises(exc.TaskclusterConnectionError):
             client._makeHttpRequest('GET', 'test', None)
         p.assert_has_calls(expectedCalls)
@@ -639,7 +649,7 @@ def test_build_url_query_string(client, apiPath_2):
         },
         query={'qs0': 1}
     )
-    assert apiPath_2 + '?qs0=1' == actual
+    assert f'{apiPath_2}?qs0=1' == actual
 
 
 def test_fails_to_build_url_for_missing_method(client):
@@ -660,13 +670,13 @@ def apiPath_3():
 def test_builds_surl_positional(client, apiPath_3):
     actual = client.buildSignedUrl('two_args_no_input', 'arg0', 'arg1')
     actual = re.sub('bewit=[^&]*', 'bewit=X', actual)
-    assert apiPath_3 + '?bewit=X' == actual
+    assert f'{apiPath_3}?bewit=X' == actual
 
 
 def test_builds_surl_keyword(client, apiPath_3):
     actual = client.buildSignedUrl('two_args_no_input', arg0='arg0', arg1='arg1')
     actual = re.sub('bewit=[^&]*', 'bewit=X', actual)
-    assert apiPath_3 + '?bewit=X' == actual
+    assert f'{apiPath_3}?bewit=X' == actual
 
 
 def fakeSite(url, request, expected_url=None, expected_body=None):
@@ -749,7 +759,7 @@ def test_no_creds_needed():
     @httmock.all_requests
     def auth_response(url, request):
         assert urllib.parse.urlunsplit(url) == 'https://tc-tests.example.com/api/auth/v1/clients/abc'
-        assert not ('Authorization' in request.headers)
+        assert 'Authorization' not in request.headers
         headers = {'content-type': 'application/json'}
         content = {"clientId": "abc"}
         return httmock.response(200, content, headers, None, 5, request)
