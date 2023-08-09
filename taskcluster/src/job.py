@@ -24,11 +24,13 @@ def bare_docker_worker(config, job, taskdesc):
     params = config.params
     command = []
     if run.get("clone"):
-        command.extend([
-          "git clone --quiet --depth=20 --no-single-branch {} taskcluster && ".format(params["head_repository"]),
-          "cd taskcluster && ",
-          "git checkout {} && ".format(params["head_rev"]),
-        ])
+        command.extend(
+            [
+                f'git clone --quiet --depth=20 --no-single-branch {params["head_repository"]} taskcluster && ',
+                "cd taskcluster && ",
+                f'git checkout {params["head_rev"]} && ',
+            ]
+        )
     if run.get("install"):
         command.append(run.get("install").format(**params) + " && ")
     command.append(run["command"].format(**params))
@@ -44,8 +46,7 @@ def bare_generic_worker(config, job, taskdesc):
 
     params = config.params
     command = []
-    install = run.get("install")
-    if install:
+    if install := run.get("install"):
         if isinstance(install, list):
             command.extend([c.format(**params) for c in install])
         else:

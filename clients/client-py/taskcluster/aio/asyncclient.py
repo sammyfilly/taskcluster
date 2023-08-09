@@ -60,9 +60,7 @@ class AsyncBaseClient(BaseClient):
 
     def __init__(self, *args, **kwargs):
         super(AsyncBaseClient, self).__init__(*args, **kwargs)
-        self._implicitSession = False
-        if self.session is None:
-            self._implicitSession = True
+        self._implicitSession = self.session is None
 
     def _createSession(self):
         """ If self.session isn't set, don't create an implicit.
@@ -86,17 +84,14 @@ class AsyncBaseClient(BaseClient):
         if paginationLimit and 'limit' in entry.get('query', []):
             query['limit'] = paginationLimit
 
-        if query:
-            _route = route + '?' + urllib.parse.urlencode(query)
-        else:
-            _route = route
+        _route = f'{route}?{urllib.parse.urlencode(query)}' if query else route
         response = await self._makeHttpRequest(entry['method'], _route, payload)
 
         if paginationHandler:
             paginationHandler(response)
             while response.get('continuationToken'):
                 query['continuationToken'] = response['continuationToken']
-                _route = route + '?' + urllib.parse.urlencode(query)
+                _route = f'{route}?{urllib.parse.urlencode(query)}'
                 response = await self._makeHttpRequest(entry['method'], _route, payload)
                 paginationHandler(response)
         else:
@@ -249,22 +244,23 @@ def createApiClient(name, api):
                 async def apiCall(self, *args, **kwargs):
                     return await self._makeApiCall(e, *args, **kwargs)
                 return apiCall
+
             f = addApiCall(entry)
 
-            docStr = "Call the %s api's %s method.  " % (name, entry['name'])
+            docStr = f"Call the {name} api's {entry['name']} method.  "
 
             if entry['args'] and len(entry['args']) > 0:
                 docStr += "This method takes:\n\n"
-                docStr += '\n'.join(['- ``%s``' % x for x in entry['args']])
+                docStr += '\n'.join([f'- ``{x}``' for x in entry['args']])
                 docStr += '\n\n'
             else:
                 docStr += "This method takes no arguments.  "
 
             if 'input' in entry:
-                docStr += "This method takes input ``%s``.  " % entry['input']
+                docStr += f"This method takes input ``{entry['input']}``.  "
 
             if 'output' in entry:
-                docStr += "This method gives output ``%s``" % entry['output']
+                docStr += f"This method gives output ``{entry['output']}``"
 
             docStr += '\n\nThis method does a ``%s`` to ``%s``.' % (
                 entry['method'].upper(), entry['route'])
@@ -280,14 +276,14 @@ def createApiClient(name, api):
 
             f = addTopicExchange(entry)
 
-            docStr = 'Generate a routing key pattern for the %s exchange.  ' % entry['exchange']
+            docStr = f"Generate a routing key pattern for the {entry['exchange']} exchange.  "
             docStr += 'This method takes a given routing key as a string or a '
             docStr += 'dictionary.  For each given dictionary key, the corresponding '
             docStr += 'routing key token takes its value.  For routing key tokens '
             docStr += 'which are not specified by the dictionary, the * or # character '
             docStr += 'is used depending on whether or not the key allows multiple words.\n\n'
             docStr += 'This exchange takes the following keys:\n\n'
-            docStr += '\n'.join(['- ``%s``' % x['name'] for x in entry['routingKey']])
+            docStr += '\n'.join([f"- ``{x['name']}``" for x in entry['routingKey']])
 
             f.__doc__ = docStr
 

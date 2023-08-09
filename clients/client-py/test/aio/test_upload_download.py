@@ -31,7 +31,7 @@ class FakeQueue:
         assert runId == 1
         assert name == 'public/test.data'
 
-        if self.storageType == 's3' or self.storageType == 'reference':
+        if self.storageType in ['s3', 'reference']:
             return {
                 "storageType": self.storageType,
                 "url": f"{self.ts.url()}data",
@@ -131,10 +131,9 @@ async def test_hashing_reader_hashes():
     assert (await hashingReader.read(16) == b"data")
     assert (await hashingReader.read(16) == b"")
 
-    exp = {}
     h = hashlib.sha256()
     h.update(b"some data")
-    exp["sha256"] = h.hexdigest()
+    exp = {"sha256": h.hexdigest()}
     h = hashlib.sha512()
     h.update(b"some data")
     exp["sha512"] = h.hexdigest()

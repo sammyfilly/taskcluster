@@ -14,6 +14,7 @@ file IO is important to the application.
 This module provides several pre-defined writers and writer factories for
 common cases.
 """
+
 import aiohttp
 import contextlib
 import datetime
@@ -29,7 +30,7 @@ from ..exceptions import TaskclusterArtifactError, TaskclusterFailure, ObjectHas
 
 # The subset of hashes supported by HashingWriter which are "accepted" as per
 # the object service's schemas.
-ACCEPTABLE_HASHES = set(['sha256', 'sha512'])
+ACCEPTABLE_HASHES = {'sha256', 'sha512'}
 
 
 async def downloadToBuf(**kwargs):
@@ -174,7 +175,7 @@ async def downloadArtifact(*, taskId, name, runId=None, maxRetries=5, queueServi
     else:
         artifact = await ensureCoro(queueService.artifact)(taskId, runId, name)
 
-    if artifact["storageType"] == 's3' or artifact["storageType"] == 'reference':
+    if artifact["storageType"] in ['s3', 'reference']:
         async with aiohttp.ClientSession() as session:
             return await _s3Download(artifact["url"], writerFactory, session, maxRetries)
 

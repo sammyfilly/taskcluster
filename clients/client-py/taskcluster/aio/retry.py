@@ -19,7 +19,7 @@ async def retry(maxRetries, tryFn):
 
         # if this isn't the first retry then we sleep
         if retry > 0:
-            snooze = float(retry * retry) / 10.0
+            snooze = float(retry**2) / 10.0
             log.info('Sleeping %0.2f seconds for exponential backoff', snooze)
             await asyncio.sleep(utils.calculateSleepTime(retry))
 

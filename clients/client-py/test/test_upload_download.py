@@ -26,7 +26,7 @@ class FakeQueue:
         assert runId == 1
         assert name == 'public/test.data'
 
-        if self.storageType == 's3' or self.storageType == 'reference':
+        if self.storageType in ['s3', 'reference']:
             return {
                 "storageType": self.storageType,
                 "url": f"{self.ts.url()}data",

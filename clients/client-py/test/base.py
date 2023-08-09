@@ -26,9 +26,8 @@ def createApiRef(**kwargs):
         'description': 'API Description',
         'serviceName': 'fake',
         'exchangePrefix': 'exchange/taskcluster-fake/v1',
-        'entries': []
-    }
-    default.update(kwargs)
+        'entries': [],
+    } | kwargs
     return {'reference': default}
 
 
@@ -38,9 +37,9 @@ def createApiEntryFunction(name, numArg, hasInput, method='get', **kwargs):
         fullArgs = [x[1:-1] for x in route.split('/') if x.startswith('<')]
     else:
         fullArgs = ['arg%d' % i for i in range(numArg)]
-        routeChunks = ['/<%s>' % j for j in fullArgs]
+        routeChunks = [f'/<{j}>' for j in fullArgs]
         route = ''.join(routeChunks)
-        route = '/%s%s' % (name, route)
+        route = f'/{name}{route}'
 
     default = {
         'type': 'function',
@@ -54,20 +53,18 @@ def createApiEntryFunction(name, numArg, hasInput, method='get', **kwargs):
     }
     if hasInput:
         default['input'] = 'http://localhost/schemas/v1/apiInput'
-    default.update(kwargs)
+    default |= kwargs
     return default
 
 
 def createApiEntryTopicExchange(name, exchange, **kwargs):
-    default = {
+    return {
         'type': 'topic-exchange',
         'exchange': exchange,
         'name': name,
         'title': 'Test Topic Exchange',
         'description': 'Test Topic Exchange Description',
-    }
-    default.update(kwargs)
-    return default
+    } | kwargs
 
 
 def createTopicExchangeKey(name, constant=None, multipleWords=False, maxSize=5,
@@ -81,7 +78,7 @@ def createTopicExchangeKey(name, constant=None, multipleWords=False, maxSize=5,
     }
     if constant:
         default['constant'] = constant
-    default.update(kwargs)
+    default |= kwargs
     return default
 
 

@@ -14,7 +14,7 @@ import base
 
 
 def shouldSkip():
-    vars = ['TASKCLUSTER_' + x for x in ('ROOT_URL', 'CLIENT_ID', 'ACCESS_TOKEN')]
+    vars = [f'TASKCLUSTER_{x}' for x in ('ROOT_URL', 'CLIENT_ID', 'ACCESS_TOKEN')]
     if all(v in os.environ for v in vars):
         return False
 

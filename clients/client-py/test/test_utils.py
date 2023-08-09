@@ -192,11 +192,15 @@ def test_failure():
 
 def test_success_put_file():
     with mock.patch.object(subject, 'makeSingleHttpRequest') as p:
+
+
+
         class FakeResp:
             status_code = 200
 
-            def raise_for_status(*args):
+            def raise_for_status(self):
                 pass
+
 
         p.return_value = FakeResp()
         path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'setup.py')
@@ -356,7 +360,7 @@ def test_not_expired():
 
 def clear_env(self):
     for v in 'ROOT_URL', 'CLIENT_ID', 'ACCESS_TOKEN', 'CERTIFICATE':
-        v = 'TASKCLUSTER_' + v
+        v = f'TASKCLUSTER_{v}'
         if v in os.environ:
             del os.environ[v]
 

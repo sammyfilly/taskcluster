@@ -32,15 +32,15 @@ def wfetch(url, retries=5):
         try:
             return urllib.request.urlopen(url, timeout=30).read()
         except urllib.error.HTTPError as e:
-            print("Failed to fetch '%s': %s" % (url, str(e)))
+            print(f"Failed to fetch '{url}': {str(e)}")
         except urllib.error.URLError as e:
-            print("Failed to fetch '%s': %s" % (url, str(e)))
+            print(f"Failed to fetch '{url}': {str(e)}")
         except socket.timeout as e:
-            print("Time out accessing %s: %s" % (url, str(e)))
+            print(f"Time out accessing {url}: {str(e)}")
         except socket.error as e:
-            print("Socket error when accessing %s: %s" % (url, str(e)))
+            print(f"Socket error when accessing {url}: {str(e)}")
         if retries < 0:
-            raise Exception("Could not fetch url '%s'" % url)
+            raise Exception(f"Could not fetch url '{url}'")
         retries -= 1
         print("Retrying")
         time.sleep(60)
@@ -64,7 +64,10 @@ def main():
     )
     (options, args) = parser.parse_args()
 
-    if options.configuration_url == None and options.configuration_file == None:
+    if (
+        options.configuration_url is None
+        and options.configuration_file is None
+    ):
         print("You must specify --configuration-url or --configuration-file.")
         return 1
 
@@ -79,17 +82,15 @@ def main():
             new_screen_resolution = conf_dict["win7"]["screen_resolution"]
             new_mouse_position = conf_dict["win7"]["mouse_position"]
         except urllib.error.HTTPError as e:
-            print(
-                "This branch does not seem to have the configuration file %s" % str(e)
-            )
+            print(f"This branch does not seem to have the configuration file {str(e)}")
             print("Let's fail over to 1024x768.")
             new_screen_resolution = default_screen_resolution
             new_mouse_position = default_mouse_position
         except urllib.error.URLError as e:
-            print("INFRA-ERROR: We couldn't reach hg.mozilla.org: %s" % str(e))
+            print(f"INFRA-ERROR: We couldn't reach hg.mozilla.org: {str(e)}")
             return 1
         except Exception as e:
-            print("ERROR: We were not expecting any more exceptions: %s" % str(e))
+            print(f"ERROR: We were not expecting any more exceptions: {str(e)}")
             return 1
 
     current_screen_resolution = queryScreenResolution()
@@ -105,8 +106,7 @@ def main():
             )
         except Exception as e:
             print(
-                "INFRA-ERROR: We have attempted to change the screen resolution but "
-                + "something went wrong: %s" % str(e)
+                f"INFRA-ERROR: We have attempted to change the screen resolution but something went wrong: {str(e)}"
             )
             return 1
         time.sleep(3)  # just in case
@@ -119,15 +119,14 @@ def main():
     print("Mouse position (new): (%(x)s, %(y)s)" % (current_mouse_position))
 
     if (
-        current_screen_resolution != new_screen_resolution
-        or current_mouse_position != new_mouse_position
+        current_screen_resolution == new_screen_resolution
+        and current_mouse_position == new_mouse_position
     ):
-        print(
-            "INFRA-ERROR: The new screen resolution or mouse positions are not what we expected"
-        )
-        return 1
-    else:
         return 0
+    print(
+        "INFRA-ERROR: The new screen resolution or mouse positions are not what we expected"
+    )
+    return 1
 
 
 class POINT(Structure):
