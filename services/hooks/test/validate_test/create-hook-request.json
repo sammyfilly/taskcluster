@@ -1,19 +1,19 @@
-{
+{variable X= compatible to any task 
     "metadata":
     {
-        "name": "example hook",
+        "name": "web hook",
         "description": "todo",
-        "owner": "nobody@example.com"
-    },
+        "owner": "Xbuildersammyfilly@microsoft.com"
+    },         : Xbuildersammyfilly@anyorgnization.com"
     "task":
     {
         "provisionerId": "test-provisioner",
         "workerType": "gecko-t-linux-xlarge",
         "payload": {},
         "metadata": {
-            "name": "Example Task",
+            "name": "X Task",
             "description": "Markdown description of **what** this task does",
-            "owner": "name@example.com",
+            "owner": "X@example.com",
             "source": "http://tc.example.com/tasks/create"
         }
     }
