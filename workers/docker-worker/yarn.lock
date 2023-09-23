@@ -696,10 +696,10 @@ dockerode@^3.2.1:
     docker-modem "^3.0.0"
     tar-fs "~2.0.1"
 
-dockerode@^3.3.3:
-  version "3.3.4"
-  resolved "https://registry.yarnpkg.com/dockerode/-/dockerode-3.3.4.tgz#875de614a1be797279caa9fe27e5637cf0e40548"
-  integrity sha512-3EUwuXnCU+RUlQEheDjmBE0B7q66PV9Rw5NiH1sXwINq0M9c5ERP9fxgkw36ZHOtzf4AGEEYySnkx/sACC9EgQ==
+dockerode@^3.3.5:
+  version "3.3.5"
+  resolved "https://registry.yarnpkg.com/dockerode/-/dockerode-3.3.5.tgz#7ae3f40f2bec53ae5e9a741ce655fff459745629"
+  integrity sha512-/0YNa3ZDNeLr/tSckmD69+Gq+qVNhvKfAHNeZJBnp7EOP6RGKV8ORrJHkUn20So5wU+xxT7+1n5u8PjHbfjbSA==
   dependencies:
     "@balena/dockerignore" "^1.0.2"
     docker-modem "^3.0.0"
@@ -2035,7 +2035,8 @@ taskcluster-client@^44.20.4:
     taskcluster-lib-urls "^13.0.0"
 
 "taskcluster-lib-testing@link:../../libraries/testing":
-  version "47.0.3"
+  version "0.0.0"
+  uid ""
 
 taskcluster-lib-urls@^13.0.0:
   version "13.0.1"
