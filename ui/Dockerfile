@@ -1,4 +1,4 @@
-FROM node:18.17.0
+FROM node:lts-hydrogen
 
 WORKDIR /app/ui
 COPY yarn.lock package.json ./
