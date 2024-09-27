@@ -10,7 +10,7 @@
     "package-test": "sh package_test.sh"
   },
   "dependencies": {
-    "debug": "^4.1.1",
+    "debug": "^4.3.7",
     "got": "^11.8.1",
     "hawk": "^9.0.1",
     "lodash": "^4.17.4",
