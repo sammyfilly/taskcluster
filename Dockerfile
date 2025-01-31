@@ -62,7 +62,7 @@ RUN /bin/bash -c "\
 ##
 # build the final image
 
-FROM node:18.17.0-alpine as image
+FROM node:18.20.6-alpine as image
 RUN apk --no-cache add --update nginx bash
 COPY --from=build /base/app /app
 ENV HOME=/app
